@@ -38,13 +38,18 @@ const { post, user } = defineProps<{
 </script>
 <style scoped lang="scss">
 .post-card {
-    border-radius: 12px;
-    transition: all 0.3s ease;
+    // border-radius: 12px;
+    // transition: all 0.3s ease;
     cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
 
-    &:hover {
-        background-color: #F9FAFC;
+
+    &:last-child {
+        border-bottom: none;
     }
+    // &:hover {
+    //     background-color: #F9FAFC;
+    // }
 
     .title {
         font-size: 18px;
