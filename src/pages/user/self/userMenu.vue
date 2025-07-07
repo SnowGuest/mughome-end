@@ -4,7 +4,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import Tag from '@/components/tag.vue'
+// import Tag from '@/components/tag.vue'
 const { user } = defineProps<{ user: User }>()
 </script>
 <style scoped lang="scss">
