@@ -1,0 +1,32 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json",
+  "include": [
+    "env.d.ts",
+    "src/**/*",
+    "src/**/*.vue",
+    "types/env.d.ts",
+    "types/globa.d.ts",
+    "types/post.d.ts",
+    "types/monf.d.ts",
+    "types/user.d.ts",
+    "types/categorie.d.ts",
+    "types/auto-imports.d.ts",
+    "types/components.d.ts",
+    "types/other.d.ts",
+  ],
+  "exclude": [
+    "src/**/__tests__/*"
+  ],
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+    "types": [
+      "naive-ui/volar",
+      "vue-vine/macros"
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "name": "mughome",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "run-p type-check \"build-only {@}\" --",
+    "preview": "vite preview",
+    "build-only": "vite build",
+    "type-check": "vue-tsc --build"
+  },
+  "dependencies": {
+    "@emoji-mart/data": "^1.2.1",
+    "@unocss/preset-icons": "^66.3.2",
+    "@unocss/reset": "^66.3.2",
+    "@vicons/ionicons5": "^0.13.0",
+    "@vueuse/core": "^13.4.0",
+    "alova": "^3.3.3",
+    "dayjs": "^1.11.13",
+    "dompurify": "^3.2.6",
+    "emoji-mart": "^5.6.0",
+    "md-editor-v3": "^5.7.1",
+    "pinia": "^3.0.3",
+    "pinia-plugin-persistedstate": "^4.3.0",
+    "sass": "^1.89.2",
+    "vue": "^3.5.17",
+    "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "@iconify/json": "^2.2.353",
+    "@tsconfig/node22": "^22.0.2",
+    "@types/node": "^22.15.33",
+    "@unocss/preset-mini": "^66.3.2",
+    "@vitejs/plugin-vue": "^5.2.4",
+    "@vitejs/plugin-vue-jsx": "^4.2.0",
+    "@vue/tsconfig": "^0.7.0",
+    "naive-ui": "^2.42.0",
+    "npm-run-all2": "^7.0.2",
+    "typescript": "~5.8.3",
+    "unocss": "^66.3.2",
+    "unplugin-auto-import": "^19.3.0",
+    "unplugin-vue-components": "^28.7.0",
+    "vfonts": "^0.0.3",
+    "vite": "npm:rolldown-vite@latest",
+    "vite-plugin-vue-devtools": "^7.7.7",
+    "vue-tsc": "^2.2.10",
+    "vue-vine": "^1.5.4"
+  }
+}
