@@ -12,6 +12,7 @@ import Components from "unplugin-vue-components/vite";
 import { VineVitePlugin } from "vue-vine/vite";
 // https://vite.dev/config/
 export default defineConfig({
+  base: "/mug-end/",
   plugins: [
     vue(),
     VineVitePlugin(),
@@ -47,7 +48,6 @@ export default defineConfig({
   ],
   server: {
     host: true,
-    allowedHosts: ["603bb36598.goho.co"]
   },
   resolve: {
     alias: {
