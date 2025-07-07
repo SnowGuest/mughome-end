@@ -7,7 +7,7 @@
                 <h3 class="title mb-2 mt-3 font-bold">{{ post.title }}</h3>
                 <div class="flex">
                     <div class="flex flex-col flex-1">
-                        <n-performant-ellipsis class="desu" line-clamp="3">
+                        <n-performant-ellipsis class="desu" line-clamp="3" :tooltip="false">
                             {{ post.introduction }}
                         </n-performant-ellipsis>
                         <Tag class="mt-auto" :post="post" />
