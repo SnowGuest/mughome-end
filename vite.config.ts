@@ -12,7 +12,7 @@ import Components from "unplugin-vue-components/vite";
 import { VineVitePlugin } from "vue-vine/vite";
 // https://vite.dev/config/
 export default defineConfig({
-  base: "/mug-end/",
+  base: "/mughome-end/",
   plugins: [
     vue(),
     VineVitePlugin(),
