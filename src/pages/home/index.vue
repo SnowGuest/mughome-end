@@ -78,6 +78,7 @@ function handleCheck(value: PostsParams["sortField"]) {
     sortField.value = value;
     page.value = 1;
     postlist.value.clear();
+    firstLoading.value = true
     init();
 }
 init()

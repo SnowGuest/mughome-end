@@ -1,5 +1,5 @@
 <template>
-    <n-tabs type="segment" animated @update:value="handleCheck" style="width: 200px;">
+    <n-tabs type="segment" animated @update:value="handleCheck" class="w-50 mt-4">
         <n-tab-pane name="createdData" tab="最新"></n-tab-pane>
         <n-tab-pane name="likeCount" tab="热门"></n-tab-pane>
     </n-tabs>

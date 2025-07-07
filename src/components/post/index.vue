@@ -3,7 +3,6 @@
         <template #default="{ navigate }">
             <article class="post-card flex flex-col p-4" @click="navigate">
                 <PostHeader v-if="user" :user="user" :post="post" />
-
                 <h3 class="title mb-2 mt-3 font-bold">{{ post.title }}</h3>
                 <div class="flex">
                     <div class="flex flex-col flex-1">
@@ -33,8 +32,6 @@ const { post, user } = defineProps<{
 }>()
 </script>
 <style scoped lang="scss">
-
-
 .post-card {
     border-radius: 12px;
     transition: all 0.3s ease;
