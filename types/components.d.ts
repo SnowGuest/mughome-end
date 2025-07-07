@@ -28,6 +28,7 @@ declare module 'vue' {
     NInput: typeof import('naive-ui')['NInput']
     NMessageProvider: typeof import('naive-ui')['NMessageProvider']
     NPageHeader: typeof import('naive-ui')['NPageHeader']
+    NPerformantEllipsis: typeof import('naive-ui')['NPerformantEllipsis']
     NPopover: typeof import('naive-ui')['NPopover']
     NScrollbar: typeof import('naive-ui')['NScrollbar']
     NSkeleton: typeof import('naive-ui')['NSkeleton']
@@ -43,6 +44,6 @@ declare module 'vue' {
     PostHeader: typeof import('./../src/components/post/postHeader.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    Tag: typeof import('./../src/components/tag.vue')['default']
+    Tag: typeof import('./../src/components/post/tag.vue')['default']
   }
 }
