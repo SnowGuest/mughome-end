@@ -1,7 +1,7 @@
 <template>
     <template v-if="signin">
         <n-dropdown :options="userOptions" @select="handleSelect">
-            <router-link :to="`/user/${userInfo.id}`" custom>
+            <router-link :to="`/user/${userInfo.id}`" custom v-if="userInfo">
                 <template #default="{ navigate }">
                     <div class="flex items-center cursor-pointer" @click="navigate">
                         <n-avatar round :size="32" :src="userInfo.avatarUrl" class="mr-2" />
@@ -31,7 +31,8 @@ import { h } from 'vue'
 import { NIcon } from 'naive-ui'
 import type { DropdownOption } from 'naive-ui'
 import { storeToRefs } from "pinia"
-const { userInfo, loginOut, signin } = storeToRefs(useAppStore())
+const appStore = useAppStore()
+const { userInfo, signin } = storeToRefs(appStore)
 
 const userOptions: DropdownOption[] = [
     {
@@ -43,7 +44,7 @@ const userOptions: DropdownOption[] = [
 
 const handleSelect = (key: string) => {
     if (key === 'logout') {
-        loginOut()
+        appStore.loginOut()
     }
 }
 </script>
