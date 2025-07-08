@@ -1,6 +1,6 @@
 <template>
     <div class="user-card p-6 flex flex-col items-center justify-center">
-        <n-avatar round size="small" src="https://07akioni.oss-cn-beijing.aliyuncs.com/07akioni.jpeg" />
+        <n-avatar round size="large" :src="user.avatarUrl" />
         <h3 class="mb-1 mt-4 nickName">{{ user.nickName }}</h3>
         <!-- <Tag>LV.5</Tag> -->
         <p class="mb-4 mt-2 activeDay">已活跃1天</p>
@@ -15,6 +15,8 @@ const { user } = defineProps<{ user: User }>()
 .user-card {
     background: #FFFFFF;
     box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05), 0px 0px 0px 0px rgba(0, 0, 0, 0.00), 0px 0px 0px 0px rgba(0, 0, 0, 0.00);
+    border-radius: 8px;
+
     border-radius: 8px;
     min-width: 280px;
 }

@@ -1,3 +1,4 @@
+import { useAppStore } from "@/stores/app";
 import request from "@/utils/request";
 
 type AccountResponse = InstanceBody<{
@@ -63,6 +64,29 @@ export async function getRegisterCode(email: string) {
                     16: "该邮箱已被其他账户注册",
                     41: "邮箱验证码错误,请重新获取",
                 },
+            },
+        },
+    );
+}
+
+interface UpdateUserInfoReqBody {
+    nickname: User["nickName"];
+    avatar: File;
+    bio: User["bio"];
+}
+
+/**
+ * @description 注册的时候获取验证码
+ */
+export async function updateUserInfo(reqBody: UpdateUserInfoReqBody) {
+    const appStore = useAppStore();
+    if (!appStore.userInfo) throw new Error("无用户信息");
+    return request.Put<InstanceBody<undefined>>(
+        `/user/${appStore.userInfo.id}`,
+        reqBody,
+        {
+            meta: {
+                errorCode: {},
             },
         },
     );

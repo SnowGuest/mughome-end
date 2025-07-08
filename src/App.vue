@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { NConfigProvider, type GlobalThemeOverrides } from 'naive-ui'
+import { NConfigProvider, type GlobalThemeOverrides, zhCN, dateZhCN } from 'naive-ui'
 
 const themeOverrides: GlobalThemeOverrides = {
   "common": {
@@ -12,7 +12,8 @@ const themeOverrides: GlobalThemeOverrides = {
 </script>
 
 <template>
-  <n-config-provider inline-theme-disabled abstract :theme-overrides="themeOverrides">
+  <n-config-provider :locale="zhCN" :date-locale="dateZhCN" inline-theme-disabled abstract
+    :theme-overrides="themeOverrides">
     <n-message-provider>
       <RouterView />
     </n-message-provider>

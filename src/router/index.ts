@@ -24,6 +24,9 @@ const router = createRouter({
         {
           path: "/user/:id",
           name: "user",
+          meta: {
+            background: "#FAFAFA",
+          },
           component: () => import("@/pages/user/self/index.vue"),
         },
       ],

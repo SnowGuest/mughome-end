@@ -13,9 +13,9 @@ const { onAuthRequired, onResponseRefreshToken } =
     createClientTokenAuthentication({
         async login(response, method) {
             const res = await response.clone().json();
-            console.log(res.data.token, "过来了");
             const appStore = useAppStore();
             if (res.code === 0) {
+                console.log(res.data.token, "过来了");
                 appStore.userInfo = res.data.user;
                 appStore.token = res.data.token;
                 console.log(appStore.token, "存入token");

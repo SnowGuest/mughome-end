@@ -6,7 +6,9 @@
                 <span class="nickname">{{ user.nickName }}</span>
                 <span class="time text-xs text-gray-400 ml-2">{{ formatTime(comment.createdDate) }}</span>
             </div>
-            <div class="comment-content mb-3" v-html="DOMPurify.sanitize(comment.content)"></div>
+            <n-performant-ellipsis class="desu" line-clamp="12" :tooltip="false" expand-trigger="click">
+                <div class="comment-content mb-3" v-html="DOMPurify.sanitize(comment.content)"></div>
+            </n-performant-ellipsis>
             <n-space size="small">
                 <n-button quaternary size="small">
                     <template #icon><n-icon :component="HeartOutline" size="16" /></template>
