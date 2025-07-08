@@ -19,19 +19,16 @@ const menuOptions = [
         key: 'user-base',
         icon: renderIcon(User)
     },
-    { type: 'divider' },
     {
         label: '帖子管理',
         key: 'post-manage',
         icon: renderIcon(AlignBoxTopLeft)
     },
-    { type: 'divider' },
     {
         label: '账号安全',
         key: 'account-security',
         icon: renderIcon(Security)
     },
-    { type: 'divider' },
     {
         label: '通知设置',
         key: 'notification-settings',
