@@ -1,17 +1,17 @@
 <template>
     <div class="flex statistics">
         <div class="statistic">
-            <img class="icon" src="../images/post.svg" alt="">
+            <img class="icon" src="../../images/post.svg" alt="">
             <span class="count">{{ Math.round(animatedPostCount) }}</span>
             <span class="text">发帖数</span>
         </div>
         <div class="statistic">
-            <img class="icon" src="../images/like.svg" alt="">
-            <span class="count">{{ Math.round(animatedLikeCount) }}</span>
-            <span class="text">获赞数</span>
+            <img class="icon" src="../../images/like.svg" alt="">
+            <span class="count">{{ Math.round(animatedFollowerCount) }}</span>
+            <span class="text">被关注</span>
         </div>
         <div class="statistic">
-            <img class="icon" src="../images/like.svg" alt="">
+            <img class="icon" src="../../images/like.svg" alt="">
 
             <span class="count">{{ Math.round(animatedVisitCount) }}</span>
             <span class="text">访问数</span>
@@ -21,17 +21,23 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useTransition } from '@vueuse/core'
-
+const { user } = defineProps<{
+    user: User
+}>()
 const postCount = ref(0)
-const likeCount = ref(0)
+const followerCount = ref(0)
 const visitCount = ref(0)
 
 // 让动画目标值和实际值一致即可
 const animatedPostCount = useTransition(postCount, { duration: 1000 })
-const animatedLikeCount = useTransition(likeCount, { duration: 1000 })
+const animatedFollowerCount = useTransition(followerCount, { duration: 1000 })
 const animatedVisitCount = useTransition(visitCount, { duration: 1000 })
 // 你可以根据实际数据动态设置 postCount.value 和 likeCount.value
-
+setTimeout(() => {
+    postCount.value = Number(user.postCount)
+    followerCount.value = Number(user.followerCount)
+    visitCount.value = Number(user.postCount)
+}, 1000)
 </script>
 <style scoped lang="scss">
 .statistics {

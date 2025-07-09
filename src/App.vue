@@ -15,7 +15,9 @@ const themeOverrides: GlobalThemeOverrides = {
   <n-config-provider :locale="zhCN" :date-locale="dateZhCN" inline-theme-disabled abstract
     :theme-overrides="themeOverrides">
     <n-message-provider>
-      <RouterView />
+      <n-dialog-provider>
+        <RouterView />
+      </n-dialog-provider>
     </n-message-provider>
   </n-config-provider>
 </template>

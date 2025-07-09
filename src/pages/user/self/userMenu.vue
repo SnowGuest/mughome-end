@@ -1,6 +1,6 @@
 <template>
     <div class="user-card ">
-        <n-menu :options="menuOptions" />
+        <n-menu :options="menuOptions" v-model:value="menuKey" />
     </div>
 </template>
 <script setup lang="ts">
@@ -8,6 +8,7 @@ const { user } = defineProps<{ user: User }>()
 import { h } from "vue"
 import { NIcon } from "naive-ui"
 import { User, AlignBoxTopLeft, Security, NotificationNew } from "@vicons/carbon"
+const menuKey = defineModel<string>('menuKey')
 function renderIcon(component: Component) {
     return () => h(NIcon, {
         component
@@ -35,6 +36,7 @@ const menuOptions = [
         icon: renderIcon(NotificationNew)
     }
 ]
+
 </script>
 <style scoped lang="scss">
 .user-card {

@@ -46,7 +46,7 @@ const page = ref(1);
 const pageSize = 10;
 const firstLoading = ref(true)
 const loading = ref(false);
-const sortField = ref<PostsParams["sortField"]>("createdData");
+const sortField = ref<PostsParams["sortField"]>("createdDate");
 async function init() {
     try {
         const result = await getPosts({

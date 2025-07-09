@@ -1,6 +1,6 @@
 <template>
     <div class="user-base p-6">
-        <h3>基本信息</h3>
+        <h2 class="mb-3">基本信息</h2>
         <n-form label-placement="left" label-width="80">
             <n-form-item label="头像">
                 <n-upload @error="handleError" @finish="handleFinish" :max="1" :action :default-file-list="avatarList"

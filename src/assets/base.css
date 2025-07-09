@@ -29,6 +29,10 @@ body {
 :root {
   --mug-header-height: 64px;
   --page-view-height: calc(100vh - var(--mug-header-height));
+  --primary-color: #ff7846ff;
+  --primary-color-hover: #ff9066ff;
+  --primary-color-pressed: #ff6025ff;
+  --primary-color-suppl: #ff7846ff;
 }
 
 .link-reset {

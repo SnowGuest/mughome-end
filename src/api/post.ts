@@ -6,6 +6,8 @@ export interface PostsBody {
         categories: Categorie[];
     };
     post: Post[];
+    totalPostCount: number;
+
 }
 export interface PostBody {
     includes: {
@@ -21,11 +23,12 @@ export interface Pagination {
     pageSize?: string | number;
 }
 export interface PostsParams extends Pagination {
-    postUserId?: number | string;
+    postUserId?: User["id"];
     sort?: string | number;
     content?: string;
     categorieId?: string | number;
-    sortField?: "createdData" | "likeCount";
+    sortField?: "createdDate" | "likeCount";
+    sortType?: "asc" | "desc";
 }
 
 export interface PostParams {
