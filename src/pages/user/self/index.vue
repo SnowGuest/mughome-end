@@ -18,9 +18,11 @@ import UserCard from './userCard.vue'
 import userMenu from './userMenu.vue'
 import UserBase from './userBase/index.vue'
 import PostManage from './postManage/index.vue'
+import AccountSecurity from './accountSecurity/index.vue'
 const kv = {
     'user-base': UserBase,
     'post-manage': PostManage,
+    'account-security': AccountSecurity
 }
 const comp = computed(() => menuKey.value in kv ? kv[menuKey.value as keyof typeof kv] : null)
 const app = useAppStore()

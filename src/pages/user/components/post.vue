@@ -2,18 +2,19 @@
     <div class="post-container">
         <div class="flex  items-center">
             <h3 class="title font-bold mr-auto" @click="handleClick">{{ post.title }}</h3>
-            <n-button quaternary>
+            <n-button quaternary v-if="editPost">
                 <template #icon><n-icon :component="Edit" size="18" /></template>
             </n-button>
-            <n-button quaternary @click="deletePost">
+            <n-button quaternary @click="deletePost" v-if="editPost">
                 <template #icon><n-icon :component="Delete" size="18" /></template>
             </n-button>
         </div>
         <Tag :post="post" />
         <n-space align="center">
             <span class="text-xs"> {{ post.createdDate }}</span>
-            <n-button quaternary>
-                <template #icon><n-icon :component="HeartOutline" size="18" /></template>
+            <n-button quaternary :loading="likeLoading" @click="handleLike">
+                <template #icon><n-icon :color="post.relations.isLiked ? '#ff7846' : ''"
+                        :component="post.relations.isLiked ? Heart : HeartOutline" size="18" /></template>
                 <span class="text-sm">{{ post.likeCount }}赞</span>
             </n-button>
             <n-button quaternary>
@@ -27,11 +28,13 @@
 </template>
 
 <script setup lang="ts">
-import { HeartOutline, ChatbubbleOutline, ShareSocialOutline, BookmarkOutline } from '@vicons/ionicons5'
+import { HeartOutline, Heart, ChatbubbleOutline, ShareSocialOutline, BookmarkOutline } from '@vicons/ionicons5'
 import { useRouter } from 'vue-router';
 import { Delete, Edit } from '@vicons/carbon'
-const { post } = defineProps<{
-    post: Post
+import { postLike } from '@/api/post';
+const { post, editPost = false } = defineProps<{
+    post: Post,
+    editPost: boolean
 }>();
 const router = useRouter()
 async function handleClick() {
@@ -49,6 +52,23 @@ function deletePost() {
             // await deletePost()
         },
     })
+}
+const likeLoading = ref(false)
+async function handleLike() {
+    try {
+        console.log("部署？？？")
+        likeLoading.value = true
+        const cancel = post.relations.isLiked
+        const result = await postLike(post.id, cancel);
+        if (result.code === 0) {
+            post.likeCount = post.likeCount + (cancel ? -1 : 1)
+            post.relations.isLiked = !cancel
+        }
+    } catch (e) {
+        console.log(e, '点赞接口出错')
+    } finally {
+        likeLoading.value = false
+    }
 }
 </script>
 <style scoped lang="scss">

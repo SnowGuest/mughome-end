@@ -27,7 +27,7 @@ const router = createRouter({
           meta: {
             background: "#FAFAFA",
           },
-          component: () => import("@/pages/user/self/index.vue"),
+          component: () => import("@/pages/user/guide.vue"),
         },
       ],
     },

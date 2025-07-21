@@ -4,7 +4,7 @@
 <script setup lang="ts">
 import { useAppStore } from '@/stores/app';
 import { useRoute } from 'vue-router';
-import userDetail from './detail.vue';
+import userDetail from './detail/index.vue';
 import userSelf from './self/index.vue';
 import { getUser } from '@/api/user';
 const app = useAppStore();
@@ -15,6 +15,5 @@ const self = computed(() => {
     return self;
 });
 
-const user = ref<User>();
 
 </script>

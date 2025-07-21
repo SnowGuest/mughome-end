@@ -1,7 +1,6 @@
 <template>
     <div class="flex flex-col w-100% ml-3 mr-3">
-        <h2 class="top-container p-6">帖子管理</h2>
-        <UserStatistics class="mt-4" :user="user" v-if="user" />
+        <h2 class="top-container p-6">帖子管理({{ user.postCount }})</h2>
         <div class="top-container p-6 mb-3 mt-3 flex-1">
             <n-tabs v-model:value="tab" type="line">
                 <n-tab-pane name="all" tab="全部帖子">
@@ -20,7 +19,6 @@
 </template>
 <script setup lang="ts">
 import RecentlyRelease from './recentlyRelease.vue'
-import UserStatistics from './userStatistics.vue'
 const { user } = defineProps<{
     user: User
 }>();

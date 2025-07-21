@@ -1,6 +1,10 @@
 <template>
   <div class="flex items-center">
-    <n-avatar round :size="40" :src="user.avatarUrl" class="mr-3" />
+    <router-link :to="`/user/${user.id}`" custom>
+      <template #default="{ navigate }">
+        <n-avatar round :size="40" :src="user.avatarUrl" class="mr-3" @click="navigate" />
+      </template>
+    </router-link>
     <div class="flex flex-col">
       <span class="author-name">{{ user.nickName }}</span>
       <span class="author-dscu">{{ user.bio }}</span>
@@ -23,7 +27,8 @@ const { user } = defineProps<{
   font-weight: 500;
   color: #333;
 }
-.author-dscu{
+
+.author-dscu {
   color: #666;
   font-size: 12px;
   max-width: 300px;
