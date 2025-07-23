@@ -7,7 +7,6 @@ export interface PostsBody {
     };
     post: Post[];
     totalPostCount: number;
-
 }
 export interface PostBody {
     includes: {
@@ -64,7 +63,7 @@ export function getPostComments(id: string | number, params?: PostParams) {
  * @POST 点赞
  * @param id 帖子id
  */
-export async function postLike(id: Post["id"], cancel?: boolean) {
+export async function postLikeAPI(id: Post["id"], cancel?: boolean) {
     return await request.Get<InstanceBody>(
         `like/post/${id}`,
         {
@@ -103,13 +102,6 @@ export function setPost(data: setPostParams) {
     ).send(true);
 }
 
-interface CommentPost {
-    includes: {
-        users: User[];
-    };
-    comment: Comment;
-}
-
 /**
  * @POST 点赞评论
  * @param commentId 评论id
@@ -118,7 +110,7 @@ export function postCommentLike(
     commentId: PostComment["id"],
     cancel?: boolean,
 ) {
-    return request.Get<InstanceBody<CommentPost>>(`like/comment/${commentId}`, {
+    return request.Get<InstanceBody<PostComment>>(`like/comment/${commentId}`, {
         params: { cancel },
         meta: {
             requiredLogin: true,
@@ -126,17 +118,24 @@ export function postCommentLike(
     });
 }
 /**
- * @POST 点赞评论
+ * @POST 评论
  * @param postId 帖子id
  * @param content 内容
- * @param parentCommentId 评论id
+ * @param parentCommentId 回复id
  */
 export function postComment(
-    postId: string,
+    postId: Post["id"],
     content: string,
     parentCommentId?: string | number,
 ) {
-    return request.Post<InstanceBody<CommentPost>>(`/comment/publish`, {
+    return request.Post<
+        InstanceBody<{
+            comment: PostComment;
+            includes: {
+                users: User[];
+            };
+        }>
+    >(`/comment/publish`, {
         postId,
         content,
         parentCommentId,

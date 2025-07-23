@@ -70,8 +70,10 @@ const app = useAppStore();
 async function handleLogin() {
     try {
         loading.value = true;
-        await login(formValue.value);
-        router.replace("/");
+        const result = await login(formValue.value);
+        if (result.code === 0) {
+            router.replace("/");
+        }
     } finally {
         loading.value = false
     }

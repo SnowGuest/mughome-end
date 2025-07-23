@@ -1,6 +1,6 @@
 <template>
-    <div v-if="user" class="comment pt-3 pb-3">
-        <n-avatar round :size="36" class="mr-3 flex-shrink-0" style="grid-area: avatar;" :src="user.avatarUrl" />
+    <div v-if="user" class="sub-comment pt-3 pb-3">
+        <n-avatar round :size="24" class="mr-3 flex-shrink-0" style="grid-area: avatar;" :src="user.avatarUrl" />
         <div class="flex flex-col flex-1 min-w-0" style="grid-area: content;">
             <div class="user-info mb-2">
                 <span class="nickname">{{ user.nickName }}</span>
@@ -21,27 +21,21 @@
                 </n-button>
             </n-space>
         </div>
-        <div :style="{ gridArea: 'sub-comment' }" v-if="comment.relations?.subCommentIds">
-            <SubComment v-for="comment in subComments" :key="comment.id" :comment="comment" :commentsMap="comments" />
-        </div>
     </div>
 </template>
 <script setup lang="ts">
 import { useUsers } from '@/stores/user';
 import { computed } from "vue"
 import DOMPurify from 'dompurify';
-import { HeartOutline, ChatbubbleOutline, Heart } from '@vicons/ionicons5'
+import { HeartOutline, ChatbubbleOutline, Heart, BookmarkOutline } from '@vicons/ionicons5'
 import dayjs from 'dayjs'
-import SubComment from './subComment.vue';
 import { postCommentLike } from '@/api/post';
-const { comment, comments } = defineProps<{
-    comment: PostComment;
-    comments: Map<PostComment["id"], PostComment>
-}>();
 
-const subComments = computed(() => {
-    return comment.relations?.subCommentIds?.map(id => comments.get(id)).filter(e => e) as PostComment[];
-})
+
+const { comment, commentsMap } = defineProps<{
+    comment: PostComment;
+    commentsMap: Map<PostComment["id"], PostComment>
+}>();
 const userStore = useUsers()
 const user = computed<User | undefined>(e => userStore.getUser(comment.createdUserId))
 
@@ -52,7 +46,6 @@ const commentList = inject<{
     rebackComment: (comment: PostComment) => void
 }>("comment-list");
 const rebackComment = () => {
-    console.log(commentList, '???')
     commentList?.rebackComment(comment)
 }
 const likeLoading = ref(false)
@@ -81,7 +74,7 @@ const likeComment = async () => {
 }
 </script>
 <style scoped lang="scss">
-.comment {
+.sub-comment {
     border-bottom: 1px solid #f0f0f0;
     display: grid;
     grid-template-columns: auto 1fr;

@@ -8,7 +8,7 @@
                     </n-breadcrumb>
                 </template>
             </n-page-header>
-            <n-grid cols="4" item-responsive responsive="screen">
+            <n-grid cols="4" item-responsive responsive="screen" :x-gap="16">
                 <n-grid-item span="4 m:3 l:3">
                     <div v-if="firstLoading" class="mt-4">
                         <n-skeleton text style="width: 50%" />
@@ -20,7 +20,7 @@
                         <h1 class="title">{{ post.title }}</h1>
                         <PostHeader :user="user" />
                         <MdPreview :id="id" :modelValue="DOMPurify.sanitize(post.content)" />
-                        <Comments :comments="commentList" />
+                        <Comments :comments="commentList" :post="post" @commentSuccess="handleCommentSuccess" />
                     </article>
                 </n-grid-item>
                 <n-grid-item span="0 m:1 l:1">
@@ -85,7 +85,13 @@ async function init() {
         post.value = result.data.post;
         userStore.setUsers(result.data.includes.users)
         categoriesStore.setCategories(result.data.includes.categories);
-        result.data.includes.comments.forEach(e => {
+        const comments = result.data.includes.comments
+        const subCommentIds = comments.map(e => e.relations && e.relations.subCommentIds && e.relations.subCommentIds).flat();
+
+        comments.forEach(e => {
+            if (subCommentIds.includes(e.id)) {
+                e.isHidden = true
+            }
             commentList.value.set(e.id, e);
         })
     } catch (error) {
@@ -99,6 +105,25 @@ const scrollElement = ref<HTMLElement>();
 onMounted(() => {
     scrollElement.value = document.querySelector(".container-scroll > .n-scrollbar-container") as HTMLElement;
 })
+function handleCommentSuccess(comment: PostComment, topCommentId?: PostComment["id"]) {
+    if (topCommentId) {
+        const topComment = commentList.value.get(topCommentId);
+        comment.isHidden = true;
+        commentList.value.set(comment.id, comment);
+        if (topComment) {
+            if (!topComment.relations) topComment.relations = { subCommentIds: [] };
+            if (!topComment.relations.subCommentIds) topComment.relations.subCommentIds = [];
+            topComment.relations.subCommentIds.push(comment.id);
+            return
+        }
+    }
+    console.log(comment, '评论成功')
+    let newCommentList = Array.from(commentList.value)
+    newCommentList.unshift([comment.id, comment]);
+    const newCommentListMap = new Map(newCommentList);
+    commentList.value = newCommentListMap
+
+}
 </script>
 <style scoped lang="scss">
 .container-scroll {
