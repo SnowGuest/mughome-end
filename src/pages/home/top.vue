@@ -14,7 +14,7 @@ async function init() {
 }
 init()
 </script>
-<style scoped lang="scss">
+<style scoped lang="less">
 .banner {
     width: 100%;
     height: 280px;

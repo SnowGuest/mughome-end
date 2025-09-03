@@ -78,7 +78,7 @@ const alovaInstance = createAlova({
             message.warning("请先登录");
             throw Promise.reject();
         }
-
+        console.log(appStore.signin, "看看有没有登录");
         if (appStore.signin) {
             method.config.headers.Authorization =
                 `Bearer ${appStore.token?.value}`;

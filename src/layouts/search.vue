@@ -10,7 +10,7 @@
 <script setup lang="ts">
 
 </script>
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .search-icon {
     left: 10px;
     top: 50%;

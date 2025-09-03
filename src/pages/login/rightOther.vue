@@ -15,7 +15,7 @@
 <script setup lang="ts">
 
 </script>
-<style scoped lang="scss">
+<style scoped lang="less">
 @media screen and (max-width: 1024px) {
     .moblie {
         display: flex;

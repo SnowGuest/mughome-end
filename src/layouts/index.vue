@@ -9,4 +9,4 @@ import MugHeader from './mugHeader.vue';
 
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="less" scoped></style>

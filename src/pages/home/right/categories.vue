@@ -17,7 +17,7 @@ import { useCategories } from '@/stores/categories';
 const categoriesStore = useCategories();
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .hot-categories {
     .title {
         font-size: 16px;

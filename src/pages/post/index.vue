@@ -125,7 +125,7 @@ function handleCommentSuccess(comment: PostComment, topCommentId?: PostComment["
 
 }
 </script>
-<style scoped lang="scss">
+<style scoped lang="less">
 .container-scroll {
     :deep(.n-scrollbar-container) {
         position: relative;

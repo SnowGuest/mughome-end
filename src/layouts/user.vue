@@ -56,7 +56,7 @@ const handleSelect = (key: string) => {
 }
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .link-reset {
     text-decoration: none;
     color: inherit;

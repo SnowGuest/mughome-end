@@ -26,7 +26,7 @@ const { user } = defineProps<{
 }>();
 
 </script>
-<style scoped lang="scss">
+<style scoped lang="less">
 .user-other {
     margin-top: 16px;
     background: #F9FAFB;

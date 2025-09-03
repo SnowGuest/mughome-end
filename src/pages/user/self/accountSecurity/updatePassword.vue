@@ -71,4 +71,4 @@ function handleSendCode() {
     active.value = true;
 }
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="less"></style>

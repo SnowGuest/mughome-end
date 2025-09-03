@@ -1,85 +1,162 @@
 <template>
-    <n-modal v-model:show="show" :close-on-esc="false" preset="dialog" title="修改邮箱" @positive-click="submitCallback">
-        <n-form :model="form" :rules="rules" v-if="checkTab === '1'">
-            <n-form-item path="code">
-                <div class="flex flex-col w-full">
-                    <n-alert type="warning" class="mb-6 ">
-                        请先验证您的旧邮箱地址
-                    </n-alert>
-                    <div class="flex justify-center">
-                        <n-input-otp class="ml-auto mr-auto" v-model:value="firstForm.code" />
-                        <div class="w-30 flex justify-center items-center">
-                            <n-button type="primary" @click="firstActive = true" v-if="!firstActive">
-                                发送验证码
-                            </n-button>
-                            <n-button disabled @click="firstActive = true" v-else>
-                                <n-countdown :render="renderCountdown" :duration="1000 * 60" :active="firstActive"
-                                    class="ml-2" />
-                            </n-button>
+    <n-modal v-model:show="show" :close-on-esc="false" preset="dialog" title="修改邮箱" 
+        positive-text="确认修改" 
+        negative-text="取消"
+        size="large"
+        @positive-click="handleSubmit"
+        @negative-click="show = false">
+       
+        <!-- 当前绑定邮箱显示 -->
+        <n-alert type="success" :show-icon="true" class="mb-4">
+            <template #header>
+                当前绑定邮箱
+            </template>
+            {{ currentEmail }}
+        </n-alert>
 
-
-                        </div>
-                    </div>
-                </div>
+        <n-form :model="form" :rules="rules">
+            <n-form-item label="新邮箱地址" path="newemail">
+                <n-input v-model:value="form.newemail" placeholder="请输入新的邮箱地址" />
             </n-form-item>
-            <n-button block type="primary" @click="handleSubmit"> 提交</n-button>
-        </n-form>
-        <n-form :model="form" :rules="rules" v-else-if="checkTab === '2'">
-            <n-form-item label="新邮箱地址" path="email">
-                <n-input v-model:value="form.email" />
-            </n-form-item>
+            
             <n-form-item label="验证码" path="code">
                 <n-input-group>
-                    <n-input v-model:value="form.code" />
-                    <n-button class="w-30" type="primary" @click="handleSendCode" v-if="!active">
-                        发送验证码
-                    </n-button>
-                    <n-button disabled v-else class="w-30" type="primary">
-                        <n-countdown :render="renderCountdown" :duration="1000 * 60" :active="active" class="ml-2" />
+                    <n-input v-model:value="form.code" placeholder="请输入验证码" />
+                    <n-button 
+                        class="w-30" 
+                        type="primary" 
+                        :disabled="isCountingDown"
+                        @click="handleSendCode"
+                    >
+                        {{ sendCodeButtonText }}
                     </n-button>
                 </n-input-group>
             </n-form-item>
-            <n-space justify="end">
-                <n-button @click="checkTab = '1'">返回上一步</n-button>
-                <n-button block type="primary" @click="handleSubmit">修改邮箱</n-button>
-            </n-space>
+            
+            <div class="text-sm text-gray-500 mb-4">
+                验证码将发送至您的新邮箱
+            </div>
         </n-form>
 
     </n-modal>
 </template>
 <script setup lang="ts">
-import type { CountdownTimeInfo, FormRules } from 'naive-ui';
+import type { FormRules } from 'naive-ui';
+import { useMessage } from 'naive-ui';
+import { useInterval } from '@vueuse/core';
+import { getUpdateUserEmailCode, updateEmailAPI } from '@/api/account';
 
 const show = defineModel<boolean>('show');
 const { user } = defineProps<{ user: User }>();
-const firstForm = ref({
-    code: []
+const message = useMessage();
+
+// 当前邮箱地址 - 可以根据实际情况设置
+const currentEmail = computed(() => user.email) // 留空变量，可以从 user 对象中获取
+
+// 倒计时相关
+const countdown = ref(0)
+const isCountingDown = ref(false)
+
+// 倒计时控制
+const { pause, resume } = useInterval(1000, {
+    controls: true,
+    immediate: false,
+    callback() {
+        if (countdown.value > 0) {
+            countdown.value--
+        } else {
+            isCountingDown.value = false
+            pause()
+        }
+    }
 })
-const firstActive = ref(false);
-const active = ref(false);
+
+// 发送验证码按钮文本
+const sendCodeButtonText = computed(() => {
+    if (isCountingDown.value) {
+        return `${countdown.value}s 后重新发送`
+    }
+    return '发送验证码'
+})
+
 const form = ref({
-    email: '',
+    newemail: '',
     code: '',
-    password: '',
 })
-const checkTab = ref("1")
 const rules: FormRules = {
-    email: [
+    newemail: [
         { required: true, message: '请输入邮箱地址' },
         { type: 'email', message: '请输入正确的邮箱地址' },
     ],
+    code: [
+        { required: true, message: '请输入验证码' },
+    ],
 }
-function submitCallback() {
-    console.log('submitCallback');
+
+async function handleSubmit() {
+    // 验证表单
+    if (!form.value.newemail) {
+        message.error('请输入新邮箱地址');
+        return false;
+    }
+    
+    if (!form.value.code) {
+        message.error('请输入验证码');
+        return false;
+    }
+
+    try {
+        // 调用更新邮箱API
+        await updateEmailAPI({
+            newemail: form.value.newemail,
+            code: form.value.code
+        });
+        
+        message.success('邮箱修改成功！');
+        show.value = false;
+        
+        // 重置表单
+        form.value = {
+            newemail: '',
+            code: ''
+        };
+        isCountingDown.value = false;
+        countdown.value = 0;
+        pause();
+        
+        return true;
+    } catch (error: any) {
+        message.error(error.message || '邮箱修改失败，请重试');
+        return false;
+    }
 }
-function handleSubmit() {
-    checkTab.value = '2'
-}
-function renderCountdown(props: CountdownTimeInfo) {
-    return `请${props.minutes * 60 || props.seconds}秒后重试`;
-}
-function handleSendCode() {
-    active.value = true;
+
+async function handleSendCode() {
+    if (!form.value.newemail) {
+        message.error('请先输入新邮箱地址');
+        return;
+    }
+    
+    // 验证邮箱格式
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(form.value.newemail)) {
+        message.error('请输入正确的邮箱格式');
+        return;
+    }
+
+    try {
+        // 调用API发送验证码
+        await getUpdateUserEmailCode(form.value.newemail);
+        
+        message.success('验证码已发送至您的新邮箱');
+        
+        // 开始倒计时
+        countdown.value = 60;
+        isCountingDown.value = true;
+        resume();
+    } catch (error: any) {
+        message.error(error.message || '发送验证码失败，请重试');
+    }
 }
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="less"></style>

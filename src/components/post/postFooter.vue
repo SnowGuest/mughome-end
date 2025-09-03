@@ -51,7 +51,7 @@ const postLike = async () => {
 
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .post-footer {
   margin-top: 8px;
 }

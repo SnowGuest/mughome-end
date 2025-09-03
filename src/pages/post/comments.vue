@@ -112,7 +112,7 @@ provide("comment-list", {
     }
 })
 </script>
-<style scoped lang="scss">
+<style scoped lang="less">
 .comment-sticky {
     position: sticky;
     bottom: 0;

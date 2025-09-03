@@ -6,7 +6,7 @@
 <script setup lang="ts">
 const { background } = defineProps<{ background?: string }>()
 </script>
-<style scoped lang="scss">
+<style scoped lang="less">
 .scroll {
     height: var(--page-view-height);
 }

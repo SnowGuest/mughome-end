@@ -36,7 +36,7 @@ const { post, user } = defineProps<{
     categories?: Categorie
 }>()
 </script>
-<style scoped lang="scss">
+<style scoped lang="less">
 .post-card {
     // border-radius: 12px;
     // transition: all 0.3s ease;

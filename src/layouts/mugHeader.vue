@@ -15,7 +15,7 @@ import Logo from './logo.vue';
 
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .mug-container {
     width: 100%;
     border-bottom: 1px solid #F3F4F6;

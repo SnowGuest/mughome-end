@@ -14,7 +14,7 @@ import { followUserApi, getUser, unfollowUserApi } from '@/api/user';
 const { user } = defineProps<{ user: User }>()
 
 </script>
-<style scoped lang="scss">
+<style scoped lang="less">
 .user-card {
     background: #FFFFFF;
     box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05), 0px 0px 0px 0px rgba(0, 0, 0, 0.00), 0px 0px 0px 0px rgba(0, 0, 0, 0.00);

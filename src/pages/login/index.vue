@@ -21,7 +21,7 @@ import Login from './login.vue';
 import RightOther from './rightOther.vue';
 
 </script>
-<style scoped lang="scss">
+<style scoped lang="less">
 .login-container {
     width: 100%;
     height: 100%;

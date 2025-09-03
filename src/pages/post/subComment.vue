@@ -73,7 +73,7 @@ const likeComment = async () => {
     }
 }
 </script>
-<style scoped lang="scss">
+<style scoped lang="less">
 .sub-comment {
     border-bottom: 1px solid #f0f0f0;
     display: grid;

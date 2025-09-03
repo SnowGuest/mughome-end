@@ -13,7 +13,7 @@
                             <n-skeleton text style="width: 60%" />
                         </div>
                         <Post v-for="[id, post] in postlist" :key="id" :post="post"
-                            :user="userStore.getUser(post.createdUserId)" />
+                          :editPost="false"  :user="userStore.getUser(post.createdUserId)" />
                     </div>
                     <div v-if="loading && !firstLoading" class="loading-footer flex items-center justify-center">
                         <n-spin size="small" class='mr-2' />
@@ -84,7 +84,7 @@ function handleCheck(value: PostsParams["sortField"]) {
 init()
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .container-scroll {
     flex: 1;
     height: 0;

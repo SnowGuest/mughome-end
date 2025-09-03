@@ -31,7 +31,7 @@ const user = computed(() => app.userInfo)
 
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .container {
     max-width: 1280px;
     margin: 0 auto;

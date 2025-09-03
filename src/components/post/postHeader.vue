@@ -21,7 +21,7 @@ const { user } = defineProps<{
 
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .author-name {
   font-size: 16px;
   font-weight: 500;

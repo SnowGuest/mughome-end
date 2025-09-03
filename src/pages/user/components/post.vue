@@ -31,7 +31,7 @@
 import { HeartOutline, Heart, ChatbubbleOutline, ShareSocialOutline, BookmarkOutline } from '@vicons/ionicons5'
 import { useRouter } from 'vue-router';
 import { Delete, Edit } from '@vicons/carbon'
-import { postLike } from '@/api/post';
+import { postLikeAPI } from '@/api/post';
 const { post, editPost = false } = defineProps<{
     post: Post,
     editPost: boolean
@@ -59,7 +59,7 @@ async function handleLike() {
         console.log("部署？？？")
         likeLoading.value = true
         const cancel = post.relations.isLiked
-        const result = await postLike(post.id, cancel);
+        const result = await postLikeAPI(post.id, cancel);
         if (result.code === 0) {
             post.likeCount = post.likeCount + (cancel ? -1 : 1)
             post.relations.isLiked = !cancel
@@ -71,7 +71,7 @@ async function handleLike() {
     }
 }
 </script>
-<style scoped lang="scss">
+<style scoped lang="less">
 .post-container {
     border-bottom: 1px solid #F3F4F6;
     // margin-top: 16px;

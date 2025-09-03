@@ -51,7 +51,7 @@ async function init() {
 }
 init()
 </script>
-<style scoped lang="scss">
+<style scoped lang="less">
 .release-container {
     background: #FFFFFF;
     box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05), 0px 0px 0px 0px rgba(0, 0, 0, 0.00), 0px 0px 0px 0px rgba(0, 0, 0, 0.00);

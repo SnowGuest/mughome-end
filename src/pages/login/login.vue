@@ -1,5 +1,5 @@
 <template>
-    <n-form ref="formRef" :model="formValue" :rules="rules" :disabled="loading">
+    <n-form size="large" ref="formRef" :model="formValue" :rules="rules" :disabled="loading">
         <n-form-item label="账号" path="account">
             <n-input v-model:value="formValue.account" placeholder="请输入账号" :input-props="{
                 autocomplete: 'username'
@@ -21,7 +21,7 @@
 
         <div class=" flex justify-end items-center">
 
-            <n-button quaternary type="primary">
+            <n-button quaternary type="primary" @click="toForgetPasswordPage">
                 忘记密码？
             </n-button>
         </div>
@@ -62,6 +62,9 @@ const formValue = ref({
     account: "",
     password: "",
 });
+function toForgetPasswordPage(){
+    router.push('/forget-password');
+}
 const router = useRouter();
 const app = useAppStore();
 async function handleLogin() {
@@ -81,4 +84,4 @@ async function handleRegister() {
 }
 </script>
 
-<style scoped lang="scss"></style>
+<style scoped lang="less"></style>

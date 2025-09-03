@@ -7,7 +7,7 @@
             <n-skeleton text :repeat="3" />
             <n-skeleton text style="width: 60%" />
         </div>
-        <Post v-for="[id, post] in postlist" :key="id" :post="post" :user="userStore.getUser(post.createdUserId)" />
+        <Post v-for="[id, post] in postlist" :key="id" :post="post" :user="userStore.getUser(post.createdUserId)" edit-post />
     </div>
 </template>
 <script setup lang="ts">
@@ -46,7 +46,7 @@ async function init() {
 }
 init()
 </script>
-<style scoped lang="scss">
+<style scoped lang="less">
 .release-container {
     background: #FFFFFF;
     box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05), 0px 0px 0px 0px rgba(0, 0, 0, 0.00), 0px 0px 0px 0px rgba(0, 0, 0, 0.00);

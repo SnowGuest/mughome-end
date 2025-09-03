@@ -91,3 +91,80 @@ export async function updateUserInfo(reqBody: UpdateUserInfoReqBody) {
         },
     );
 }
+
+/**
+ * @description 忘记密码的时候发送验证码重置验证码
+ */
+export async function getForgetpasswordEmailCode(account: string) {
+    return request.Post<InstanceBody<undefined>>(
+        `/account/forget`,
+        {},
+        {
+            params: {
+                account,
+            },
+            meta: {
+                errorCode: {},
+            },
+        },
+    );
+}
+
+/**
+ * @description 忘记密码的时候发送验证码重置验证码
+ */
+export async function getUpdateUserEmailCode(newemail: string) {
+    return request.Post<InstanceBody<undefined>>(
+        `/account/sendResetEmail`,
+        {newemail},
+        {
+            params: {
+                newemail,
+            },
+            meta: {
+                errorCode: {},
+            },
+        },
+    );
+}
+
+interface forgetPasswordReqBody {
+    account: string;
+    newpassword: string;
+    code: string;
+}
+
+/**
+ * @description 忘记密码的时候发送验证码重置验证码
+ */
+export async function forgetPasswordAPI(reqBody: forgetPasswordReqBody) {
+    return request.Put<InstanceBody<undefined>>(
+        `/account/resetAccount`,
+        reqBody,
+        {
+            meta: {
+                errorCode: {},
+            },
+        },
+    );
+}
+
+interface updateEmailReqBody {
+    newemail: string;
+    code: string;
+}
+
+/**
+ * @description 忘记密码的时候发送验证码重置验证码
+ */
+export async function updateEmailAPI(reqBody: updateEmailReqBody) {
+    return request.Put<InstanceBody<undefined>>(
+        `/resetEmail`,
+        reqBody,
+        {
+            meta: {
+                errorCode: {},
+            },
+        },
+    );
+}

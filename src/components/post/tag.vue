@@ -15,4 +15,4 @@ const categories = computed(() => {
     return post.relations.categoryIds.map(e => categoriesStore.getCategorie(e)).filter(e => e !== undefined && e !== null)
 })
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="less"></style>

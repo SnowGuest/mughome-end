@@ -31,7 +31,7 @@ setTimeout(() => {
     followerCount.value = Number(user.followerCount)
 }, 1000)
 </script>
-<style scoped lang="scss">
+<style scoped lang="less">
 .statistics {
     display: grid;
     grid-template-columns: 1fr 1fr;

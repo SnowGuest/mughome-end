@@ -35,7 +35,7 @@ defineProps({
 })
 </script>
 
-<style scoped lang="scss">
+<style scoped lang="less">
 .post-body {
   padding: 16px;
   background-color: #fff;
