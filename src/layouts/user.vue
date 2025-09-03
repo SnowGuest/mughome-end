@@ -1,15 +1,22 @@
 <template>
     <template v-if="signin">
-        <n-dropdown :options="userOptions" @select="handleSelect">
-            <router-link :to="`/user/${userInfo.id}`" custom v-if="userInfo">
+        <n-space>
+            <router-link to="/created" custom>
                 <template #default="{ navigate }">
-                    <div class="flex items-center cursor-pointer" @click="navigate">
-                        <n-avatar round :size="32" :src="userInfo.avatarUrl" class="mr-2" />
-                        <span class="mr-2">{{ userInfo.nickName }}</span>
-                    </div>
+                    <n-button quaternary type="primary" @click="navigate">发个帖子</n-button>
                 </template>
             </router-link>
-        </n-dropdown>
+            <n-dropdown :options="userOptions" @select="handleSelect">
+                <router-link :to="`/user/${userInfo.id}`" custom v-if="userInfo">
+                    <template #default="{ navigate }">
+                        <div class="flex items-center cursor-pointer" @click="navigate">
+                            <n-avatar round :size="32" :src="userInfo.avatarUrl" class="mr-2" />
+                            <span class="mr-2">{{ userInfo.nickName }}</span>
+                        </div>
+                    </template>
+                </router-link>
+            </n-dropdown>
+        </n-space>
     </template>
     <template v-else>
         <n-button quaternary type="primary" class="mr-2">

@@ -19,10 +19,8 @@
             </n-input>
         </n-form-item>
 
-        <div class=" flex justify-between items-center">
-            <n-checkbox v-model:checked="formValue.isRemember" :disabled="loading">
-                记住密码
-            </n-checkbox>
+        <div class=" flex justify-end items-center">
+
             <n-button quaternary type="primary">
                 忘记密码？
             </n-button>
@@ -63,7 +61,6 @@ const rules = {
 const formValue = ref({
     account: "",
     password: "",
-    isRemember: false
 });
 const router = useRouter();
 const app = useAppStore();

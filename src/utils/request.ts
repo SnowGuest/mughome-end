@@ -86,10 +86,23 @@ const alovaInstance = createAlova({
     }),
     responded: onResponseRefreshToken({
         onSuccess: async (response, method) => {
-            const json = await response.json();
+            const appStore = useAppStore();
+
+            let json = await response.json();
             if (method.meta?.errorCode) {
                 requestError2Message(json, method.meta.errorCode);
             }
+            if (json.code === 52) {
+                appStore.loginOut();
+                message.warning("登录信息已过期，请重新登录");
+                const newRponse = await method;
+                json = await newRponse.json();
+                if (method.meta?.errorCode) {
+                    requestError2Message(json, method.meta.errorCode);
+                }
+                // throw Promise.reject(json);
+            }
+
             return json;
         },
 
