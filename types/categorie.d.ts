@@ -9,6 +9,7 @@ declare global {
         name: string;
         parentId: number;
         slug: string;
+        children?: Categorie[];
     }
 }
 export {};

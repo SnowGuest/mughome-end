@@ -70,7 +70,7 @@ export async function getRegisterCode(email: string) {
 }
 
 export interface UpdateUserInfoReqBody {
-    nickname?: User["nickName"];
+    nickName?: User["nickName"];
     avatar?: File;
     bio?: User["bio"];
 }

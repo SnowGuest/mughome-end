@@ -79,8 +79,7 @@ export async function postLikeAPI(id: Post["id"], cancel?: boolean) {
 export interface setPostParams {
     title: string;
     content: string;
-    categoryId: (number | null)[];
-    isMONFVote: boolean;
+    categoryId: (number)[];
     headerImage?: string;
 }
 
