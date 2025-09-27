@@ -69,10 +69,10 @@ export async function getRegisterCode(email: string) {
     );
 }
 
-interface UpdateUserInfoReqBody {
-    nickname: User["nickName"];
-    avatar: File;
-    bio: User["bio"];
+export interface UpdateUserInfoReqBody {
+    nickname?: User["nickName"];
+    avatar?: File;
+    bio?: User["bio"];
 }
 
 /**
@@ -159,7 +159,7 @@ interface updateEmailReqBody {
  */
 export async function updateEmailAPI(reqBody: updateEmailReqBody) {
     return request.Put<InstanceBody<undefined>>(
-        `/resetEmail`,
+        `/account/resetEmail`,
         reqBody,
         {
             meta: {
@@ -168,3 +168,5 @@ export async function updateEmailAPI(reqBody: updateEmailReqBody) {
         },
     );
 }
+
+

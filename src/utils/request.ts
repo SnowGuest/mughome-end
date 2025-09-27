@@ -96,6 +96,7 @@ const alovaInstance = createAlova({
                 appStore.loginOut();
                 message.warning("登录信息已过期，请重新登录");
                 const newRponse = await method;
+                method.config.headers.Authorization = undefined;
                 json = await newRponse.json();
                 if (method.meta?.errorCode) {
                     requestError2Message(json, method.meta.errorCode);

@@ -7,10 +7,13 @@
                     <n-input v-model:value="formValue.title" placeholder="请输入帖子标题" maxlength="50" show-count />
                 </n-form-item>
                 <n-form-item label="选择分区" path="categoryId">
+                    <n-card title="卡片">
+                        卡片内容
+                    </n-card>                             
                 </n-form-item>
-                <n-form-item label="关联标签" path="tagIds">
+                <!-- <n-form-item label="关联标签" path="tagIds">
                     <n-input v-model:value="inputTag" placeholder="添加标签，按回车确认" maxlength="5" show-count />
-                </n-form-item>
+                </n-form-item> -->
                 <n-form-item label="封面图片" path="cover">
                     <n-upload directory-dnd @error="handleError" @finish="handleFinish" :max="1" :action
                         :default-file-list="headerImage">
@@ -25,6 +28,7 @@
                                 点击或者拖动文件到该区域来上传
                             </n-text>
                         </n-upload-dragger>
+
                     </n-upload>
                 </n-form-item>
                 <n-form-item label="帖子内容" path="content">
