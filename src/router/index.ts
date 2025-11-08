@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
 import layout from "@/layouts/index.vue";
-import login from "@/pages/login/index.vue";
 import home from "@/pages/home/index.vue";
 
 const router = createRouter({
@@ -21,10 +20,20 @@ const router = createRouter({
           name: "post",
           component: () => import("@/pages/post/index.vue"),
         },
+           {
+          path: "/categorie/:postId",
+          name: "categorie",
+          component: () => import("@/pages/categorie/index.vue"),
+        },
         {
           path: "/created",
           name: "created",
           component: () => import("@/pages/created/index.vue"),
+        },
+        {
+          path: "/search",
+          name: "search",
+          component: () => import("@/pages/search/index.vue"),
         },
         {
           path: "/user/:id",
@@ -46,7 +55,7 @@ const router = createRouter({
       name: "login",
       component: () => import("@/pages/login/index.vue"),
     },
-       {
+    {
       path: "/forget-password",
       name: "forget-password",
       component: () => import("@/pages/forget-password/index.vue"),

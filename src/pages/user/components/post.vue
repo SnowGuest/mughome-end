@@ -49,7 +49,7 @@ function deletePost() {
         negativeText: '取消',
         maskClosable: false,
         async onPositiveClick() {
-            // await deletePost()
+            // await deletePostAPI(post.id)
         },
     })
 }

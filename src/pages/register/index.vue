@@ -3,7 +3,7 @@
         <n-card class="register-card" :bordered="false">
             <div class="logo-title">
                 <img src="@/assets/images/logo.png" alt="logo" class="logo" />
-                <div class="forum-title">音游论坛</div>
+                <div class="forum-title">音柚窝</div>
             </div>
             <div class="register-title">创建账号</div>
             <div class="register-desc">加入音游爱好者的集聚地，开启你的音乐之旅</div>
@@ -17,6 +17,15 @@
                             <img src="./images/email.png" alt="邮箱" class="input-icon" />
                         </template>
                     </n-input>
+                </n-form-item>
+                <n-form-item label="邮箱验证码" path="RegisterCode">
+                    <div class="captcha-row">
+                        <n-input v-model:value="form.RegisterCode" placeholder="请输入邮箱验证码"
+                            :input-props="{ autocomplete: 'off' }" />
+                        <n-button type="primary" ghost :disabled="remaining > 0" @click="handleGetCode">
+                            {{ remaining > 0 ? `${remaining}秒后重试` : '获取验证码' }}
+                        </n-button>
+                    </div>
                 </n-form-item>
                 <n-form-item label="设置密码" path="password">
                     <n-input v-model:value="form.password" type="password" show-password-on="click" placeholder="请输入密码"
@@ -41,15 +50,7 @@
                         <img class="captcha-img" :src="captchaUrl" alt="验证码" @click="refreshCaptcha" />
                     </div>
                 </n-form-item>
-                <n-form-item label="邮箱验证码" path="RegisterCode">
-                    <div class="captcha-row">
-                        <n-input v-model:value="form.RegisterCode" placeholder="请输入邮箱验证码"
-                            :input-props="{ autocomplete: 'off' }" />
-                        <n-button type="primary" ghost :disabled="remaining > 0" @click="handleGetCode">
-                            {{ remaining > 0 ? `${remaining}秒后重试` : '获取验证码' }}
-                        </n-button>
-                    </div>
-                </n-form-item>
+              
                 <n-form-item prop="isAcceptTerm">
                     <n-checkbox v-model:checked="form.isAcceptTerm">
                         我已阅读并同意
@@ -168,10 +169,14 @@ async function handleRegister() {
 <style scoped>
 .register-container {
     min-height: 100vh;
+    max-height: 100vh;
+    height: 100vh;
+    flex: 1;
+    overflow-y:auto;
     display: flex;
-    align-items: center;
     justify-content: center;
     background: #fff;
+    /* overflow: hidden; */
 }
 
 .register-card {

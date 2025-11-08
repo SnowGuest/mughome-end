@@ -5,7 +5,7 @@
         <!-- <Tag>LV.5</Tag> -->
         <p class="mb-4 mt-2 activeDay">已连续签到{{ user.continuousPunchCount }}天</p>
         <p class="desu mb-4">{{ user.bio }}</p>
-        <n-button block type="primary" v-if="user.relations?.isSubscribed" @click="handleFollow(true)">关注</n-button>
+        <n-button block type="primary" v-if="!(user.relations?.isSubscribed)" @click="handleFollow(true)">关注</n-button>
         <n-button block v-else @click="handleFollow(false)">取消关注</n-button>
     </div>
 </template>

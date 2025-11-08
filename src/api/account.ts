@@ -81,8 +81,8 @@ export interface UpdateUserInfoReqBody {
 export async function updateUserInfo(reqBody: UpdateUserInfoReqBody) {
     const appStore = useAppStore();
     if (!appStore.userInfo) throw new Error("无用户信息");
-    return request.Put<InstanceBody<undefined>>(
-        `/user/${appStore.userInfo.id}`,
+    return request.Post<InstanceBody<undefined>>(
+        `/account/${appStore.userInfo.id}`,
         reqBody,
         {
             meta: {

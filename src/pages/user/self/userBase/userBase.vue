@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useAppStore } from '@/stores/app'
-import type { FormInst, UploadFileInfo } from 'naive-ui'
+import type { FormInst, UploadFileInfo, UploadOnFinish } from 'naive-ui'
 import { storeToRefs } from 'pinia'
 import { updateUserInfo, type UpdateUserInfoReqBody } from '@/api/account'
 const { userInfo, token } = storeToRefs(useAppStore())
@@ -33,15 +33,30 @@ const avatarList = computed<UploadFileInfo[]>(() => userInfo.value && userInfo.v
     url: userInfo.value.avatarUrl
 }] : []);
 const action = computed(() => {
-    return `${import.meta.env.VITE_REQUEST_BASE_URL}user/${userInfo.value?.id}`
+    return `${import.meta.env.VITE_REQUEST_BASE_URL}account/${userInfo.value?.id}`
 })
+const appStore = useAppStore()
 const formInst = ref<FormInst>();
 const message = useMessage()
 const handleError = () => {
     message.error("上传头像文件失败请重试")
 }
-const handleFinish = () => {
+const handleFinish = ({
+    file,
+    event
+}: {
+    file: UploadFileInfo
+    event?: ProgressEvent
+}) => {
+    if (!event) return
+    let res = (event.target as XMLHttpRequest).response as InstanceBody<{ user: User, token: Token }>
+    if (typeof res === "string") res = JSON.parse(res);
     message.success("上传头像成功")
+    file.url = res.data.user.avatarUrl
+    appStore.userInfo = res.data.user;
+    appStore.token = res.data.token;
+
+    return file
 }
 const form = reactive<UpdateUserInfoReqBody>({
     nickName: userInfo.value?.nickName || '',

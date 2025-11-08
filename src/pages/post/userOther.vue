@@ -1,8 +1,8 @@
 <template>
     <div class="user-other p-6">
         <PostHeader :user="user" />
-        <n-button class="mt-4 mb-4" round block type="primary" v-if="!user.relations?.isSubscribed">关注</n-button>
-        <n-button class="mt-4 mb-4" round block type="info" v-else>已关注</n-button>
+        <n-button @click="subscribe(true)" class="mt-4 mb-4" round block type="primary" v-if="!user.relations?.isSubscribed">关注</n-button>
+        <n-button @click="subscribe(false)" class="mt-4 mb-4" round block type="info" v-else>已关注</n-button>
         <n-space justify="space-between">
             <div>
                 <span>{{ user.postCount }}</span>
@@ -20,11 +20,17 @@
 </template>
 <script setup lang="ts">
 import PostHeader from '@/components/post/postHeader.vue';
-
+import { followUserApi, unfollowUserApi } from '@/api/user';
 const { user } = defineProps<{
     user: User;
 }>();
-
+const subscribe = async  (isSubscribe: boolean) => {
+    if (isSubscribe) {
+        await followUserApi(user.id)
+    } else {
+        await unfollowUserApi(user.id)
+    }
+}
 </script>
 <style scoped lang="less">
 .user-other {
