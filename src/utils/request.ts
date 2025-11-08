@@ -5,13 +5,13 @@ import VueHook from "alova/vue";
 import { createClientTokenAuthentication } from "alova/client";
 import { refreshToken } from "@/api/token";
 import { createDiscreteApi } from "naive-ui";
-const { message, notification, dialog, loadingBar, modal } = createDiscreteApi(
+const { message } = createDiscreteApi(
     ["message", "dialog", "notification", "loadingBar", "modal"],
 );
 
 const { onAuthRequired, onResponseRefreshToken } =
     createClientTokenAuthentication({
-        async login(response, method) {
+        async login(response) {
             const res = await response.clone().json();
             const appStore = useAppStore();
             if (res.code === 0) {
@@ -24,7 +24,7 @@ const { onAuthRequired, onResponseRefreshToken } =
 
         refreshToken: {
             // 在请求前触发，将接收到method参数，并返回boolean表示token是否过期
-            isExpired: (method) => {
+            isExpired: () => {
                 const appStore = useAppStore();
                 if (appStore.token) {
                     return Number(`${appStore.token.exp}0000`) +
@@ -35,13 +35,14 @@ const { onAuthRequired, onResponseRefreshToken } =
             },
 
             // 当token过期时触发，在此函数中触发刷新token
-            handler: async (method) => {
+            handler: async () => {
                 const appStore = useAppStore();
                 try {
                     const { data } = await refreshToken();
                     console.log("过期了");
                     appStore.token = data.token;
                 } catch (error) {
+                    console.log(error);
                     // appStore.loginOut()
                     // localforage.clear();
                     // const router = useRouter()
@@ -110,7 +111,7 @@ const alovaInstance = createAlova({
         // 请求失败的拦截器
         // 请求错误时将会进入该拦截器。
         // 第二个参数为当前请求的method实例，你可以用它同步请求前后的配置信息
-        onError: (err, method) => {
+        onError: () => {
             message.error("服务器异常，请稍后重试");
         },
     }),
