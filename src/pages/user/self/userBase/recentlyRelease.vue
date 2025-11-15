@@ -8,6 +8,12 @@
             <n-skeleton text style="width: 60%" />
         </div>
         <Post v-for="[id, post] in postlist" :key="id" :post="post" :user="userStore.getUser(post.createdUserId)" edit-post />
+        
+        <!-- 空状态 -->
+        <n-empty v-if="!firstLoading && !loading && postlist.size === 0" 
+          description="还没有发布过帖子" 
+          class="empty-state" 
+          size="small" />
     </div>
 </template>
 <script setup lang="ts">
@@ -51,5 +57,10 @@ init()
     background: #FFFFFF;
     box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05), 0px 0px 0px 0px rgba(0, 0, 0, 0.00), 0px 0px 0px 0px rgba(0, 0, 0, 0.00);
     border-radius: 8px;
+}
+
+.empty-state {
+    margin-top: 40px;
+    margin-bottom: 40px;
 }
 </style>

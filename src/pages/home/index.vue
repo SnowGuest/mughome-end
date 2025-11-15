@@ -14,6 +14,11 @@
                         </div>
                         <Post v-for="[id, post] in postlist" :key="id" :post="post"
                           :editPost="false"  :user="userStore.getUser(post.createdUserId)" />
+                        
+                        <!-- 空状态 -->
+                        <n-empty v-if="!firstLoading && !loading && postlist.size === 0" 
+                          description="暂无帖子" 
+                          class="empty-state" />
                     </div>
                     <div v-if="loading && !firstLoading" class="loading-footer flex items-center justify-center">
                         <n-spin size="small" class='mr-2' />
@@ -101,5 +106,10 @@ init()
 .loading-footer {
     font-size: 14px;
     color: #999;
+}
+
+.empty-state {
+    margin-top: 60px;
+    margin-bottom: 60px;
 }
 </style>

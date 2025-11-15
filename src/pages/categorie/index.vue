@@ -38,6 +38,11 @@
             <!-- 帖子列表 -->
             <Post v-for="[id, post] in postlist" :key="id" :post="post" :editPost="false"
               :user="userStore.getUser(post.createdUserId)" />
+            
+            <!-- 空状态 -->
+            <n-empty v-if="!firstLoading && !loading && postlist.size === 0" 
+              description="该分区暂无帖子" 
+              class="empty-state" />
 
             <!-- 加载更多提示 -->
             <div v-if="loading && !firstLoading" class="loading-footer flex items-center justify-center">
@@ -337,5 +342,10 @@ fetchPosts();
   font-size: 14px;
   color: #999;
   padding: 16px 0;
+}
+
+.empty-state {
+  margin-top: 60px;
+  margin-bottom: 60px;
 }
 </style>

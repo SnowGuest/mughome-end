@@ -7,7 +7,13 @@
     </div>
     <Post v-for="[id, post] in postlist" :key="id" :post="post" :user="userStore.getUser(post.createdUserId)"
         editPost />
-    <n-pagination show-size-picker :page-sizes="[10, 20, 30, 40]" v-model:page="page" v-model:page-size="pageSize"
+    
+    <!-- 空状态 -->
+    <n-empty v-if="!loading && postlist.size === 0" 
+      description="暂无帖子" 
+      class="empty-state" />
+    
+    <n-pagination v-if="total > 0" show-size-picker :page-sizes="[10, 20, 30, 40]" v-model:page="page" v-model:page-size="pageSize"
         :item-count="total" class="ml-auto mr-auto mt-4" @update-page="init" />
 </template>
 <script setup lang="ts">
@@ -56,5 +62,10 @@ init()
     background: #FFFFFF;
     box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.05), 0px 0px 0px 0px rgba(0, 0, 0, 0.00), 0px 0px 0px 0px rgba(0, 0, 0, 0.00);
     border-radius: 8px;
+}
+
+.empty-state {
+    margin-top: 60px;
+    margin-bottom: 60px;
 }
 </style>

@@ -12,6 +12,15 @@
                         </div>
                         <Post v-for="[id, post] in postlist" :key="id" :post="post" :editPost="false"
                             :user="userStore.getUser(post.createdUserId)" />
+                        
+                        <!-- 空状态 -->
+                        <n-empty v-if="!firstLoading && !loading && postlist.size === 0" 
+                          :description="keyword ? '没有找到相关帖子' : '请输入关键词搜索'" 
+                          class="empty-state">
+                          <template #extra v-if="!keyword">
+                            <n-text depth="3" style="font-size: 14px;">在上方搜索框输入关键词开始搜索</n-text>
+                          </template>
+                        </n-empty>
                     </div>
                     <div v-if="loading && !firstLoading" class="loading-footer flex items-center justify-center">
                         <n-spin size="small" class='mr-2' />
@@ -151,5 +160,8 @@ init();
     color: #999;
 }
 
-/* 使用 Naive UI 默认样式，无自定义覆盖 */
+.empty-state {
+    margin-top: 60px;
+    margin-bottom: 60px;
+}
 </style>
