@@ -149,7 +149,7 @@ watch(activeTag, (newTag) => {
 });
 
 const handleCreatePost = () => {
-  router.push(`/post/create?categorieId=${categorieId.value}`);
+  router.push(`/created?categorieId=${categorieId.value}`);
 };
 
 const formatCount = (count: number | undefined) => {

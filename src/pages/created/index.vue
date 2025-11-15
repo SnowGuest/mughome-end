@@ -60,15 +60,22 @@ import 'md-editor-v3/lib/style.css';
 import { uploaderFile } from '@/api/file';
 import { getCategories } from '@/api/categorie';
 import { setPost, type setPostParams } from '@/api/post';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 
+const route = useRoute();
 const formRef = ref<FormInst>();
 const headerImage = computed<UploadFileInfo[]>(() => []);
+
+// 从路由获取分区 ID 作为默认值
+const initialCategoryId = route.query.categorieId 
+    ? Number(route.query.categorieId) 
+    : "";
+
 const formValue = ref({
     description: "",
     cover: "",
     title: '',
-    categoryId: "",
+    categoryId: initialCategoryId,
     content: '',
 });
 
@@ -180,7 +187,7 @@ const handlePublish = async () => {
             })
             console.log(categorie)
             if (!categorie) return
-            if (`${categorie.id}` === categoryId) {
+            if (categorie.id === categoryId) {
                 payload.categoryId = [categorie.id]
             } else {
                 const subCategorie = categorie?.children?.find(sub => sub.id === categoryId)
