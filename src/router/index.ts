@@ -21,7 +21,7 @@ const router = createRouter({
           component: () => import("@/pages/post/index.vue"),
         },
            {
-          path: "/categorie/:postId",
+          path: "/categorie/:id",
           name: "categorie",
           component: () => import("@/pages/categorie/index.vue"),
         },

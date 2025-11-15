@@ -69,22 +69,22 @@
             </n-card>
 
             <!-- 分区数据 -->
-            <n-card size="small" title="分区数据" class="mb-4">
+            <!-- <n-card size="small" title="分区数据" class="mb-4">
               <div class="stats-grid">
                 <div class="stat-item">
-                  <div class="stat-value">{{ categorie?.todayPostCount || 0 }}</div>
+                  <div class="stat-value">{{ categorie?.todayPostCount ?? 0 }}</div>
                   <div class="stat-label">今日发帖</div>
                 </div>
                 <div class="stat-item">
-                  <div class="stat-value">{{ formatCount(categorie?.postCount || 0) }}</div>
+                  <div class="stat-value">{{ formatCount(categorie?.postCount) }}</div>
                   <div class="stat-label">总帖子</div>
                 </div>
                 <div class="stat-item">
-                  <div class="stat-value">{{ formatCount(categorie?.activeUsers || 0) }}</div>
+                  <div class="stat-value">{{ formatCount(categorie?.activeUsers) }}</div>
                   <div class="stat-label">活跃用户</div>
                 </div>
               </div>
-            </n-card>
+            </n-card> -->
           </div>
         </n-grid-item>
       </n-grid>
@@ -93,11 +93,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import Container from '@/components/container/index.vue';
 import Post from '@/components/post/index.vue';
-import { getCategorie } from '@/api/categorie';
 import { getPosts, type PostsParams } from '@/api/post';
 import { useCategories } from '@/stores/categories';
 import { useUsers } from '@/stores/user';
@@ -106,9 +104,8 @@ const route = useRoute();
 const router = useRouter();
 const categoriesStore = useCategories();
 const userStore = useUsers();
-
-const categorieId = computed(() => route.params.id as string);
-const categorie = ref<Categorie | null>(null);
+const categorieId = computed(() => Number(route.params.id));
+const categorie = computed(() => categoriesStore.getCategorie(categorieId.value));
 const activeTag = ref<'hot' | 'latest' | 'recommend'>('hot');
 const loading = ref(false);
 const firstLoading = ref(true);
@@ -122,24 +119,6 @@ const sortOrder = ref<'desc' | 'asc'>('desc');
 
 // 模拟热门标签数据
 const hotTags = ref(['技术分享', '新手教程', '音游推荐', '硬件设备', '比赛资讯', '经验分享']);
-
-// 吸顶相关
-const isSticky = ref(false);
-const headerOffsetTop = ref(0);
-
-const fetchCategorieDetail = async () => {
-  if (!categorieId.value) return;
-
-  loading.value = true;
-  try {
-    const res = await getCategorie(categorieId.value);
-    categorie.value = res.data;
-  } catch (e) {
-    console.error('获取分区详情失败', e);
-  } finally {
-    loading.value = false;
-  }
-};
 
 const handleTagClick = (tag: 'hot' | 'latest' | 'recommend') => {
   activeTag.value = tag;
@@ -168,7 +147,8 @@ const handleCreatePost = () => {
   router.push(`/post/create?categorieId=${categorieId.value}`);
 };
 
-const formatCount = (count: number) => {
+const formatCount = (count: number | undefined) => {
+  if (!count) return 0;
   if (count >= 10000) {
     return (count / 10000).toFixed(1) + 'w';
   } else if (count >= 1000) {
@@ -186,7 +166,7 @@ const fetchPosts = async () => {
       pageSize,
       sortField: sortField.value,
       sortType: sortOrder.value,
-      categorieId: categorieId.value,
+      categoryId: categorieId.value,
     };
 
     const result = await getPosts(params);
@@ -213,7 +193,7 @@ const handleLoadMore = () => {
 };
 
 
-fetchCategorieDetail();
+// 初始化加载帖子
 fetchPosts();
 
 

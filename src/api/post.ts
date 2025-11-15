@@ -25,7 +25,7 @@ export interface PostsParams extends Pagination {
     postUserId?: User["id"];
     sort?: string | number;
     content?: string;
-    categorieId?: string | number;
+    categoryId?: Categorie["id"];
     sortField?: "createdDate" | "likeCount";
     sortType?: "asc" | "desc";
 }
