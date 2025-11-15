@@ -10,6 +10,10 @@ declare global {
         parentId: number;
         slug: string;
         children?: Categorie[];
+        isHot?: boolean;
+        isRecommended?: boolean;
+        todayPostCount?: number;
+        activeUsers?: number;
     }
 }
 export {};

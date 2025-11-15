@@ -1,103 +1,361 @@
 <template>
-  <Container background="#fff">
-    <div class="p-6 container">
-      <h2 class="title mb-4">分区</h2>
+  <n-infinite-scroll class="categorie-page" :distance="10" @load="handleLoadMore">
+    <div class="container  pb-6 pl-4 pr-4">
+      <!-- 顶部分区标题和标签 -->
+
+      <!-- 主内容区域 -->
       <n-grid cols="4" item-responsive responsive="screen" :x-gap="24">
-        <n-grid-item span="1 m:1 l:1">
-          <n-card>
-            <div class="side-list">
-              <n-spin :show="loading">
-                <n-list>
-                  <n-list-item v-for="p in parents" :key="p.id" :class="{active: p.id === selectedParentId}"
-                    @click="selectParent(p)">
-                    <div class="flex items-center justify-between w-full">
-                      <div>{{ p.name }}</div>
-                      <div class="text-sm text-gray-400">{{ (p as any).children?.length || 0 }}</div>
-                    </div>
-                  </n-list-item>
-                </n-list>
-              </n-spin>
+        <!-- 左侧帖子列表 -->
+        <n-grid-item span="4 m:3 l:3">
+          <div class="sticky top-0 z-10 bg-white p-4">
+            <h1 class="categorie-title">{{ categorie?.name || '加载中...' }}</h1>
+            <div class="tags-section mt-4">
+              <n-space>
+                <n-button :type="activeTag === 'hot' ? 'primary' : 'default'" round size="small"
+                  @click="handleTagClick('hot')">
+                  热门
+                </n-button>
+                <n-button :type="activeTag === 'latest' ? 'primary' : 'default'" round size="small"
+                  @click="handleTagClick('latest')">
+                  最新
+                </n-button>
+                <n-button :type="activeTag === 'recommend' ? 'primary' : 'default'" round size="small"
+                  @click="handleTagClick('recommend')">
+                  推荐
+                </n-button>
+              </n-space>
             </div>
-          </n-card>
+          </div>
+          <div class="post-list">
+            <!-- 加载骨架屏 -->
+            <div v-if="firstLoading">
+              <n-skeleton text style="width: 50%" />
+              <n-skeleton text style="width: 60%" />
+              <n-skeleton text :repeat="3" />
+              <n-skeleton text style="width: 60%" />
+            </div>
+
+            <!-- 帖子列表 -->
+            <Post v-for="[id, post] in postlist" :key="id" :post="post" :editPost="false"
+              :user="userStore.getUser(post.createdUserId)" />
+
+            <!-- 加载更多提示 -->
+            <div v-if="loading && !firstLoading" class="loading-footer flex items-center justify-center">
+              <n-spin size="small" class="mr-2" />
+              加载中...
+            </div>
+          </div>
         </n-grid-item>
 
-        <n-grid-item span="3 m:3 l:3">
-          <n-card>
-            <div class="children-grid">
-              <n-spin :show="loading">
-                <div v-if="!loading && selectedChildren.length === 0" class="empty">暂无子分区</div>
-                <n-grid :x-gap="16" :y-gap="16" cols="3">
-                  <n-grid-item v-for="c in selectedChildren" :key="c.id">
-                    <n-card size="small" bordered hoverable @click="openCategory(c.id)">
-                      <div class="child-card">
-                        <div class="name">{{ c.name }}</div>
-                        <div class="desc text-sm text-gray-500">{{ c.description || '' }}</div>
-                      </div>
-                    </n-card>
-                  </n-grid-item>
-                </n-grid>
-              </n-spin>
-            </div>
-          </n-card>
+        <!-- 右侧边栏 -->
+        <n-grid-item span="0 m:1 l:1">
+          <div class="sidebar">
+            <!-- 分区信息卡片 -->
+            <n-card size="small" class="mb-4">
+              <div class="categorie-info">
+                <div class="info-header flex items-center justify-between mb-3">
+                  <div class="flex items-center">
+                    <div class="icon-wrapper" :class="categorie?.icon" :style="{ color: categorie?.color }"></div>
+                    <span class="info-name ml-2">{{ categorie?.name }}</span>
+                  </div>
+                </div>
+                <div class="info-desc text-sm text-gray-500 mb-3">
+                  {{ categorie?.description || '分区暂无描述' }}
+                </div>
+                <n-button type="primary" block @click="handleCreatePost">
+                  发帖
+                </n-button>
+              </div>
+            </n-card>
+
+            <!-- 分区数据 -->
+            <n-card size="small" title="分区数据" class="mb-4">
+              <div class="stats-grid">
+                <div class="stat-item">
+                  <div class="stat-value">{{ categorie?.todayPostCount || 0 }}</div>
+                  <div class="stat-label">今日发帖</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-value">{{ formatCount(categorie?.postCount || 0) }}</div>
+                  <div class="stat-label">总帖子</div>
+                </div>
+                <div class="stat-item">
+                  <div class="stat-value">{{ formatCount(categorie?.activeUsers || 0) }}</div>
+                  <div class="stat-label">活跃用户</div>
+                </div>
+              </div>
+            </n-card>
+          </div>
         </n-grid-item>
       </n-grid>
     </div>
-  </Container>
+  </n-infinite-scroll>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import Container from '@/components/container/index.vue'
-import { getCategories } from '@/api/categorie'
-import { useRouter } from 'vue-router'
+import { ref, onMounted, onBeforeUnmount, computed, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import Container from '@/components/container/index.vue';
+import Post from '@/components/post/index.vue';
+import { getCategorie } from '@/api/categorie';
+import { getPosts, type PostsParams } from '@/api/post';
+import { useCategories } from '@/stores/categories';
+import { useUsers } from '@/stores/user';
 
-const loading = ref(false)
-const categories = ref<Categorie[]>([])
-const selectedParentId = ref<number | null>(null)
-const router = useRouter()
+const route = useRoute();
+const router = useRouter();
+const categoriesStore = useCategories();
+const userStore = useUsers();
 
-const parents = computed(() => categories.value.filter(c => (c as any).children && (c as any).children.length > 0))
-const selectedChildren = computed(() => {
-  if (selectedParentId.value === null) return []
-  const p = categories.value.find(c => c.id === selectedParentId.value)
-  return (p && (p as any).children) || []
-})
+const categorieId = computed(() => route.params.id as string);
+const categorie = ref<Categorie | null>(null);
+const activeTag = ref<'hot' | 'latest' | 'recommend'>('hot');
+const loading = ref(false);
+const firstLoading = ref(true);
 
-const fetch = async () => {
-  loading.value = true
+// 帖子列表相关
+const postlist = ref<Map<Post["id"], Post>>(new Map());
+const page = ref(1);
+const pageSize = 10;
+const sortField = ref<PostsParams["sortField"]>("createdDate");
+const sortOrder = ref<'desc' | 'asc'>('desc');
+
+// 模拟热门标签数据
+const hotTags = ref(['技术分享', '新手教程', '音游推荐', '硬件设备', '比赛资讯', '经验分享']);
+
+// 吸顶相关
+const isSticky = ref(false);
+const headerOffsetTop = ref(0);
+
+const fetchCategorieDetail = async () => {
+  if (!categorieId.value) return;
+
+  loading.value = true;
   try {
-    const res = await getCategories()
-    categories.value = res.data.categories || []
-    // 默认选择第一个父类
-    const first = categories.value.find(c => (c as any).children && (c as any).children.length > 0)
-    selectedParentId.value = first ? first.id : (categories.value[0] && categories.value[0].id) || null
+    const res = await getCategorie(categorieId.value);
+    categorie.value = res.data;
   } catch (e) {
-    // eslint-disable-next-line no-console
-    console.error('获取分区失败', e)
+    console.error('获取分区详情失败', e);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
-onMounted(fetch)
+const handleTagClick = (tag: 'hot' | 'latest' | 'recommend') => {
+  activeTag.value = tag;
+  // 重置列表并重新加载
+  page.value = 1;
+  postlist.value.clear();
+  firstLoading.value = true;
+  fetchPosts();
+};
 
-const selectParent = (p: Categorie) => {
-  selectedParentId.value = p.id
-}
+// 根据 activeTag 更新排序规则
+watch(activeTag, (newTag) => {
+  if (newTag === 'hot') {
+    sortField.value = 'likeCount';
+    sortOrder.value = 'desc';
+  } else if (newTag === 'latest') {
+    sortField.value = 'createdDate';
+    sortOrder.value = 'desc';
+  } else if (newTag === 'recommend') {
+    sortField.value = 'likeCount';
+    sortOrder.value = 'desc';
+  }
+});
 
-const openCategory = (id: number | string) => {
-  router.push(`/category/${id}`)
-}
+const handleCreatePost = () => {
+  router.push(`/post/create?categorieId=${categorieId.value}`);
+};
+
+const formatCount = (count: number) => {
+  if (count >= 10000) {
+    return (count / 10000).toFixed(1) + 'w';
+  } else if (count >= 1000) {
+    return (count / 1000).toFixed(1) + 'k';
+  }
+  return count;
+};
+
+// 获取帖子列表
+const fetchPosts = async () => {
+  loading.value = true;
+  try {
+    const params: PostsParams = {
+      page: page.value,
+      pageSize,
+      sortField: sortField.value,
+      sortType: sortOrder.value,
+      categorieId: categorieId.value,
+    };
+
+    const result = await getPosts(params);
+    userStore.setUsers(result.data.includes.users);
+    categoriesStore.setCategories(result.data.includes.categories);
+    result.data.post.forEach(post => {
+      postlist.value.set(post.id, post);
+    });
+    firstLoading.value = false;
+  } catch (error) {
+    console.error('获取帖子列表失败', error);
+  } finally {
+    loading.value = false;
+  }
+};
+
+// 加载更多
+const handleLoadMore = () => {
+  if (!loading.value) {
+    loading.value = true;
+    page.value++;
+    fetchPosts();
+  }
+};
+
+
+fetchCategorieDetail();
+fetchPosts();
+
+
+
 </script>
 
 <style scoped lang="less">
-.container { max-width: 1280px; margin: 0 auto }
-.title { font-size: 20px; font-weight: 700; color: #212121 }
-.side-list { min-height: 320px }
-.side-list :deep(.n-list-item) { cursor: pointer; padding: 12px }
-.side-list :deep(.n-list-item.active) { background: #f5f7fb; font-weight: 600 }
-.children-grid { min-height: 320px }
-.child-card .name { font-weight: 600; margin-bottom: 6px }
-.child-card .desc { color: #6b7280 }
-.empty { text-align: center; color: #9ca3af; padding: 32px 0 }
+.categorie-page {
+  min-height: 100vh;
+  flex: 1;
+  height: 0;
+  position: relative;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.header-section {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #fff;
+  padding: 16px 0;
+  margin: -16px 0 24px 0;
+  border-bottom: 1px solid transparent;
+  transition: all 0.3s ease;
+
+  &.is-sticky {
+    border-bottom-color: #e5e7eb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+
+
+  .tags-section {
+    :deep(.n-button) {
+      padding: 0 16px;
+    }
+  }
+}
+
+.categorie-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #333;
+  margin: 0;
+}
+
+.sidebar {
+  position: sticky;
+  top: 24px;
+
+  .categorie-info {
+    .info-header {
+      .icon-wrapper {
+        font-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+      }
+
+      .info-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+      }
+    }
+
+    .info-desc {
+      line-height: 1.6;
+    }
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    text-align: center;
+
+    .stat-item {
+      .stat-value {
+        font-size: 20px;
+        font-weight: 700;
+        color: #ff6b35;
+        margin-bottom: 4px;
+      }
+
+      .stat-label {
+        font-size: 12px;
+        color: #999;
+      }
+    }
+  }
+
+  .hot-tags {
+    :deep(.n-tag) {
+      cursor: pointer;
+      transition: all 0.2s;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+}
+
+.mb-3 {
+  margin-bottom: 12px;
+}
+
+.mb-4 {
+  margin-bottom: 16px;
+}
+
+.mb-6 {
+  margin-bottom: 24px;
+}
+
+.ml-2 {
+  margin-left: 8px;
+}
+
+.mt-4 {
+  margin-top: 16px;
+}
+
+.mr-2 {
+  margin-right: 8px;
+}
+
+.post-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.loading-footer {
+  font-size: 14px;
+  color: #999;
+  padding: 16px 0;
+}
 </style>
