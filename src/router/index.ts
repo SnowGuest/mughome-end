@@ -43,6 +43,14 @@ const router = createRouter({
           },
           component: () => import("@/pages/user/guide.vue"),
         },
+        {
+          path: "/monf/:year",
+          name: "monf",
+          meta: {
+            background: "#FAFAFA",
+          },
+          component: () => import("@/pages/contest/monf/index.vue"),
+        },
       ],
     },
     {

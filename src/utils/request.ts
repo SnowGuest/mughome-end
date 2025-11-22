@@ -68,7 +68,7 @@ const alovaInstance = createAlova({
     },
     beforeRequest: onAuthRequired((method) => {
         const appStore = useAppStore();
-        console.log(method.meta, "走不走拦截");
+        console.log(method.meta,method, "走不走拦截");
         if (method.meta && "requiredLogin" in method.meta) {
             console.log(method.meta.requiredLogin, "是否要求必须登录");
         }
@@ -83,6 +83,8 @@ const alovaInstance = createAlova({
         if (appStore.signin) {
             method.config.headers.Authorization =
                 `Bearer ${appStore.token?.value}`;
+        }else{
+          delete  method.config.headers.Authorization
         }
     }),
     responded: onResponseRefreshToken({
@@ -96,9 +98,9 @@ const alovaInstance = createAlova({
             if (json.code === 52) {
                 appStore.loginOut();
                 message.warning("登录信息已过期，请重新登录");
-                const newRponse = await method;
+                const newResponse = await method;
                 method.config.headers.Authorization = undefined;
-                json = await newRponse.json();
+                json = await newResponse.json();
                 if (method.meta?.errorCode) {
                     requestError2Message(json, method.meta.errorCode);
                 }

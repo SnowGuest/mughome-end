@@ -1,6 +1,11 @@
 <template>
     <template v-if="signin">
         <n-space>
+            <router-link to="/monf/2025" custom>
+                <template #default="{ navigate }">
+                    <n-button type="primary" @click="navigate">MONF赛事</n-button>
+                </template>
+            </router-link>
             <router-link to="/created" custom>
                 <template #default="{ navigate }">
                     <n-button quaternary type="primary" @click="navigate">发个帖子</n-button>

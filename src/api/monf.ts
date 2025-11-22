@@ -50,10 +50,10 @@ export interface MonfsParams {
 /**
  * @GET 获取monf列表
  * */
-export function getMonfs(params: MonfsParams) {
+export function getMonfList(params: MonfsParams) {
     return request.Get<InstanceBody<MonfListBody>>("/event/monf/work", {
         params,
-        name: "getMonfs"
+        name:"getMonfList"
     })
 }
 
@@ -62,7 +62,6 @@ export function getMonfs(params: MonfsParams) {
  * */
 export function getMonf(workId: string | number) {
     return request.Get<InstanceBody<MonfBody>>(`/event/monf/work/${workId}`, {
-        name: "getMonf"
     })
 }
 
@@ -72,7 +71,7 @@ export function getMonf(workId: string | number) {
  * */
 export function monfLike(monfWorkId: string | number) {
     return request.Get<InstanceBody<MonfListBody>>(`/event/monf/work/${monfWorkId}/like`, {
-        hitSource: ["getMonfs"],
+        hitSource: ["getMonfList"],
         meta: {
             requiredLogin: true,
         }
@@ -84,7 +83,7 @@ export function monfLike(monfWorkId: string | number) {
  * */
 export function monfunLike(monfWorkId: string | number) {
     return request.Get<InstanceBody<MonfListBody>>(`/event/monf/work/${monfWorkId}/like`, {
-        hitSource: ["getMonfs"],
+        hitSource: ["getMonfList"],
         meta: {
             requiredLogin: true,
         }
@@ -153,6 +152,6 @@ export function monfCommentLike(monfWorkCommentId: string | number) {
 // monf发布
 export function monfPublish(params: MonfPublishParams) {
     return request.Post<InstanceBody<MonfBody>>(`event/monf/work/publish`, params, {
-        hitSource: ["getMonfs"],
+        hitSource: ["getMonfList"],
     }).send(true)
 }
