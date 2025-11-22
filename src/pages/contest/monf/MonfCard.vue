@@ -13,6 +13,7 @@
 
         <!-- 成员标签 -->
         <div class="members-tags">
+            队员：
             <n-tag v-for="(member, index) in monf.members" :key="index" :bordered="false" round size="small"
                 :color="getTagColor(index)">
                 {{ member.memberName }}
